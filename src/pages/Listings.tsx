@@ -1,5 +1,5 @@
 "use client";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { ArrowLeft, Search, Heart, SlidersHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -26,6 +26,8 @@ import auctionsData from "@/data/auctions.json";
 const Listings = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
   const [searchQuery, setSearchQuery] = useState("");
   const [filtersOpen, setFiltersOpen] = useState(false);
   
@@ -99,6 +101,8 @@ const Listings = () => {
     filters.status,
     filters.sellerType,
   ].filter(Boolean).length;
+
+  if (!mounted) return null;
 
   return (
     <div className="min-h-screen bg-background">
