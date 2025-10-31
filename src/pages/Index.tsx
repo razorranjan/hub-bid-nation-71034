@@ -1,5 +1,6 @@
+"use client";
 import { useState, useMemo, useEffect } from "react";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import { Header } from "@/components/Header";
 import { CategoryIcons } from "@/components/CategoryIcons";
 import { HeroSearch } from "@/components/HeroSearch";
@@ -116,7 +117,7 @@ const Index = () => {
                 />
               ))}
               {liveAuctions.length > 6 && (
-                <Link to="/listings?status=Live" className="md:col-span-2 lg:col-span-3">
+                <Link href="/listings?status=Live" className="md:col-span-2 lg:col-span-3">
                   <button className="w-full py-3 md:py-4 text-primary font-medium flex items-center justify-center gap-2 hover:bg-secondary/50 rounded-lg transition-colors">
                     View more
                     <span className="text-xl">→</span>
@@ -139,7 +140,7 @@ const Index = () => {
                 />
               ))}
               {upcomingAuctions.length > 6 && (
-                <Link to="/listings?status=Upcoming" className="md:col-span-2 lg:col-span-3">
+                <Link href="/listings?status=Upcoming" className="md:col-span-2 lg:col-span-3">
                   <button className="w-full py-3 md:py-4 text-primary font-medium flex items-center justify-center gap-2 hover:bg-secondary/50 rounded-lg transition-colors">
                     View more
                     <span className="text-xl">→</span>

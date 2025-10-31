@@ -2,7 +2,7 @@ import { Clock, MapPin, Tag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 interface AuctionCardProps {
@@ -120,7 +120,7 @@ export const AuctionCard = ({
         >
           Enquire Now
         </Button>
-        <Link to={`/auction/${id}`} className="flex-1">
+        <Link href={`/auction/${id}`} className="flex-1">
           <Button 
             className="w-full h-10 md:h-11 bg-[#FF5722] hover:bg-[#FF5722]/90 font-semibold text-sm md:text-base"
           >

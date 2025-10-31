@@ -1,4 +1,6 @@
-import { useParams, Link } from "react-router-dom";
+"use client";
+import { useParams } from "next/navigation";
+import Link from "next/link";
 import { Header } from "@/components/Header";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -10,7 +12,8 @@ import { EnquiryModal } from "@/components/EnquiryModal";
 import { AuctionCard } from "@/components/AuctionCard";
 
 const AuctionDetail = () => {
-  const { id } = useParams();
+  const params = useParams();
+  const id = Array.isArray(params?.id) ? params?.id[0] : params?.id;
   const auction = auctionsData.find((a) => a.id === Number(id));
   const [enquiryModal, setEnquiryModal] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -21,7 +24,7 @@ const AuctionDetail = () => {
         <Header />
         <div className="container px-4 py-12 text-center">
           <h1 className="text-2xl font-bold mb-4">Auction Not Found</h1>
-          <Link to="/">
+          <Link href="/">
             <Button>Back to Home</Button>
           </Link>
         </div>

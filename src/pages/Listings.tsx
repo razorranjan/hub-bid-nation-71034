@@ -1,5 +1,6 @@
+"use client";
 import { useState, useMemo } from "react";
-import { useSearchParams, useNavigate } from "react-router-dom";
+import { useSearchParams, useRouter } from "next/navigation";
 import { ArrowLeft, Search, Heart, SlidersHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -23,8 +24,8 @@ import { Badge } from "@/components/ui/badge";
 import auctionsData from "@/data/auctions.json";
 
 const Listings = () => {
-  const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
+  const searchParams = useSearchParams();
+  const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
   const [filtersOpen, setFiltersOpen] = useState(false);
   
@@ -107,7 +108,7 @@ const Listings = () => {
             variant="ghost"
             size="icon"
             className="h-9 w-9 rounded-full"
-            onClick={() => navigate(-1)}
+            onClick={() => router.back()}
           >
             <ArrowLeft className="h-5 w-5" />
           </Button>
