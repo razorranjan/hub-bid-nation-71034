@@ -1,27 +1,33 @@
-import { useParams, Link } from "react-router-dom";
+"use client";
+import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import Link from "next/link";
 import { Header } from "@/components/Header";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { MapPin, Building, Calendar, ChevronLeft, ChevronRight, Phone, Heart, Bell } from "lucide-react";
 import auctionsData from "@/data/auctions.json";
-import { useState } from "react";
 import { EnquiryModal } from "@/components/EnquiryModal";
 import { AuctionCard } from "@/components/AuctionCard";
 
 const AuctionDetail = () => {
-  const { id } = useParams();
+  const params = useParams();
+  const id = Array.isArray(params?.id) ? params?.id[0] : params?.id;
   const auction = auctionsData.find((a) => a.id === Number(id));
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
   const [enquiryModal, setEnquiryModal] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
+  if (!mounted) return null;
   if (!auction) {
     return (
       <div className="min-h-screen bg-background">
         <Header />
         <div className="container px-4 py-12 text-center">
           <h1 className="text-2xl font-bold mb-4">Auction Not Found</h1>
-          <Link to="/">
+          <Link href="/">
             <Button>Back to Home</Button>
           </Link>
         </div>
@@ -202,15 +208,15 @@ const AuctionDetail = () => {
                   </div>
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Auction Date:</span>
-                    <span className="font-medium">{new Date(auction.endDate).toLocaleDateString()}</span>
+                    <span className="font-medium">{new Date(auction.endDate).toLocaleDateString('en-GB')}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Inspection Date:</span>
-                    <span className="font-medium">{new Date(auction.endDate).toLocaleDateString()}</span>
+                    <span className="font-medium">{new Date(auction.endDate).toLocaleDateString('en-GB')}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Submission Deadline:</span>
-                    <span className="font-medium">{new Date(auction.endDate).toLocaleDateString()}</span>
+                    <span className="font-medium">{new Date(auction.endDate).toLocaleDateString('en-GB')}</span>
                   </div>
                 </div>
 

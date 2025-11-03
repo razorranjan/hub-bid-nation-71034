@@ -1,12 +1,13 @@
+"use client";
 import { Home, Tractor, Package, Apple } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useRouter } from "next/navigation";
 
 interface CategoryIconsProps {
   onCategorySelect?: (category: string) => void;
 }
 
 export const CategoryIcons = ({ onCategorySelect }: CategoryIconsProps) => {
-  const navigate = useNavigate();
+  const router = useRouter();
   
   const categories = [
     { icon: Home, label: "Property", value: "Property" },
@@ -16,7 +17,7 @@ export const CategoryIcons = ({ onCategorySelect }: CategoryIconsProps) => {
   ];
 
   const handleCategoryClick = (value: string) => {
-    navigate(`/listings?category=${value}`);
+    router.push(`/listings?category=${encodeURIComponent(value)}`);
     onCategorySelect?.(value);
   };
 

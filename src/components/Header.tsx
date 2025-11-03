@@ -2,7 +2,7 @@ import { Home, Menu, Bell, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Input } from "@/components/ui/input";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 
 interface HeaderProps {
   scrolled?: boolean;
@@ -21,16 +21,16 @@ export const Header = ({ scrolled = false }: HeaderProps) => {
             </SheetTrigger>
             <SheetContent side="left" className="w-64">
               <nav className="flex flex-col gap-4 mt-8">
-                <Link to="/" className="text-lg font-medium hover:text-primary transition-colors">
+                <Link href="/" className="text-lg font-medium hover:text-primary transition-colors">
                   Home
                 </Link>
-                <Link to="/auctions?status=Live" className="text-lg font-medium hover:text-primary transition-colors">
+                <Link href="/listings?status=Live" className="text-lg font-medium hover:text-primary transition-colors">
                   Live Auctions
                 </Link>
-                <Link to="/auctions?status=Upcoming" className="text-lg font-medium hover:text-primary transition-colors">
+                <Link href="/listings?status=Upcoming" className="text-lg font-medium hover:text-primary transition-colors">
                   Upcoming
                 </Link>
-                <Link to="/profile" className="text-lg font-medium hover:text-primary transition-colors">
+                <Link href="/profile" className="text-lg font-medium hover:text-primary transition-colors">
                   My Profile
                 </Link>
               </nav>
@@ -38,7 +38,7 @@ export const Header = ({ scrolled = false }: HeaderProps) => {
           </Sheet>
           
           {!scrolled && (
-            <Link to="/" className="flex items-center gap-1 font-bold text-base">
+            <Link href="/" className="flex items-center gap-1 font-bold text-base">
               <span className="text-foreground">Auction Hub</span>
             </Link>
           )}
@@ -55,7 +55,7 @@ export const Header = ({ scrolled = false }: HeaderProps) => {
             </div>
           </div>
         ) : (
-          <Link to="/profile" className="ml-auto">
+          <Link href="/profile" className="ml-auto">
             <Button variant="default" size="sm" className="h-8 text-xs px-3">
               Your Auctions
             </Button>
@@ -67,7 +67,7 @@ export const Header = ({ scrolled = false }: HeaderProps) => {
             <Bell className="h-4 w-4" />
             <span className="absolute top-1 right-1 h-2 w-2 bg-primary rounded-full" />
           </Button>
-          <Link to="/profile">
+          <Link href="/profile">
             <Button variant="ghost" size="icon" className="h-9 w-9 rounded-full">
               <div className="flex h-7 w-7 items-center justify-center rounded-full bg-primary text-primary-foreground text-xs font-semibold">
                 RN
