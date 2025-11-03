@@ -1,4 +1,6 @@
 .next/# Logs
+/.next
+.next/
 logs
 *.log
 npm-debug.log*
