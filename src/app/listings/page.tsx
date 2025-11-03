@@ -1,9 +1,11 @@
 "use client";
 
-import Listings from '@/pages/Listings'
+import dynamic from "next/dynamic";
+
+const Listings = dynamic(() => import("@/pages/Listings"), { ssr: false });
 
 export default function Page() {
-  return <Listings />
+  return <Listings />;
 }
 
 
