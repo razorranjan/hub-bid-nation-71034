@@ -7,6 +7,7 @@ import { HeroSearch } from "@/components/HeroSearch";
 import { AuctionCard } from "@/components/AuctionCard";
 import { EnquiryModal } from "@/components/EnquiryModal";
 import { SellPropertySection } from "@/components/SellPropertySection";
+import { SEOContent } from "@/components/SEOContent";
 import auctionsData from "@/data/auctions.json";
 
 const Index = () => {
@@ -161,6 +162,8 @@ const Index = () => {
       </main>
 
       <SellPropertySection />
+
+      <SEOContent />
 
       <EnquiryModal
         open={enquiryModal.open}

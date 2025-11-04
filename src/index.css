@@ -29,6 +29,12 @@ All colors MUST be HSL.
     --accent: 207 90% 54%;
     --accent-foreground: 0 0% 100%;
 
+    --success: 140 70% 45%;
+    --success-foreground: 0 0% 100%;
+    
+    --warning: 45 100% 50%;
+    --warning-foreground: 0 0% 15%;
+
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
@@ -93,6 +99,12 @@ All colors MUST be HSL.
     --border: 0 0% 20%;
     --input: 0 0% 20%;
     --ring: 24 100% 50%;
+
+    --success: 140 70% 45%;
+    --success-foreground: 0 0% 100%;
+    
+    --warning: 45 100% 50%;
+    --warning-foreground: 0 0% 15%;
     
     --shadow-soft: 0 2px 8px -2px hsl(0 0% 0% / 0.3);
     --shadow-medium: 0 4px 16px -4px hsl(0 0% 0% / 0.4);

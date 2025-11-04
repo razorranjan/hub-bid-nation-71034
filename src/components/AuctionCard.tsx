@@ -1,21 +1,34 @@
-import { Clock, MapPin, Tag } from "lucide-react";
+"use client";
+
+import { Clock, MapPin, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
+import { UploadDocumentsDialog } from "./UploadDocumentsDialog";
+import { EnquiryDialog } from "./EnquiryDialog";
+import { PlaceBidDialog } from "./PlaceBidDialog";
+import { useUser } from "@/contexts/UserContext";
+import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
-interface AuctionCardProps {
+export type PropertyStage = "enquiry" | "verification" | "bidding";
+
+export interface AuctionCardProps {
   id: number;
   title: string;
   city: string;
   category: string;
   price: string;
+  basePrice?: number;
+  image?: string;
+  description?: string;
   auctionType: string;
   status: string;
   endDate: string;
   sellerType: string;
-  onEnquire: () => void;
+  stage: PropertyStage;
 }
 
 export const AuctionCard = ({
@@ -28,9 +41,46 @@ export const AuctionCard = ({
   status,
   endDate,
   sellerType,
-  onEnquire,
+  stage,
 }: AuctionCardProps) => {
   const [timeLeft, setTimeLeft] = useState("");
+  const { isLoggedIn, watchlist, toggleWatchlist } = useUser();
+  const isWatchlisted = watchlist.includes(id);
+
+  const [showEnquiry, setShowEnquiry] = useState(false);
+  const [showUpload, setShowUpload] = useState(false);
+  const [showBid, setShowBid] = useState(false);
+
+  const getStageConfig = () => {
+    switch (stage) {
+      case "verification":
+        return {
+          buttonText: "Upload Documents",
+          buttonVariant: "secondary" as const,
+          onClick: () => setShowUpload(true),
+          badge: "Verification Pending",
+          badgeVariant: "warning" as const,
+        };
+      case "bidding":
+        return {
+          buttonText: "Place Bid",
+          buttonVariant: "action" as const,
+          onClick: () => setShowBid(true),
+          badge: "Bidding Open",
+          badgeVariant: "success" as const,
+        };
+      default:
+        return {
+          buttonText: "Enquire Now",
+          buttonVariant: "outline" as const,
+          onClick: () => setShowEnquiry(true),
+          badge: "Live",
+          badgeVariant: "default" as const,
+        };
+    }
+  };
+
+  const config = getStageConfig();
 
   useEffect(() => {
     if (status !== "Live") return;
@@ -56,6 +106,19 @@ export const AuctionCard = ({
     return () => clearInterval(timer);
   }, [endDate, status]);
 
+  const handleWatchlistToggle = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    if (!isLoggedIn) {
+      toast.error("Please submit an enquiry to add items to watchlist");
+      return;
+    }
+    
+    toggleWatchlist(id);
+    toast.success(isWatchlisted ? "Removed from watchlist" : "Added to watchlist");
+  };
+
   const imageUrl = category === "Property" 
     ? "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=400&h=300&fit=crop"
     : "https://images.unsplash.com/photo-1581094271901-8022df4466f9?w=400&h=300&fit=crop";
@@ -73,17 +136,27 @@ export const AuctionCard = ({
           alt={title}
           className="w-full h-full object-cover"
         />
-        <div className="absolute top-3 left-3">
-          <Badge 
-            className={`${
-              status === "Live" 
-                ? "bg-[#FF5722] hover:bg-[#FF5722]" 
-                : "bg-secondary"
-            } text-white text-sm px-3 py-1 font-semibold`}
-          >
-            {status}
-          </Badge>
-        </div>
+        <Badge
+          className={cn(
+            "absolute top-4 left-4",
+            config.badgeVariant === "warning" && "bg-warning text-warning-foreground",
+            config.badgeVariant === "success" && "bg-success text-success-foreground",
+            config.badgeVariant === "default" && "bg-primary text-primary-foreground"
+          )}
+        >
+          {config.badge}
+        </Badge>
+        <button
+          onClick={handleWatchlistToggle}
+          className={`absolute top-3 right-3 w-9 h-9 rounded-full flex items-center justify-center transition-all ${
+            isWatchlisted 
+              ? 'bg-primary text-primary-foreground' 
+              : 'bg-background/90 backdrop-blur-sm hover:bg-primary hover:text-primary-foreground'
+          }`}
+          aria-label={isWatchlisted ? "Remove from watchlist" : "Add to watchlist"}
+        >
+          <Heart className={`w-4 h-4 ${isWatchlisted ? 'fill-current' : ''}`} />
+        </button>
       </div>
       
       <CardContent className="p-4 md:p-5 space-y-3 flex-1 flex flex-col">
@@ -112,14 +185,62 @@ export const AuctionCard = ({
       </CardContent>
 
       <CardFooter className="p-4 md:p-5 pt-0 flex gap-2 md:gap-3">
-        <Button 
-          variant="outline" 
+        <Button
           size="default"
+          variant={config.buttonVariant}
           className="flex-1 h-10 md:h-11 font-semibold text-sm md:text-base"
-          onClick={onEnquire}
+          onClick={config.onClick}
         >
-          Enquire Now
+          {config.buttonText}
         </Button>
+        <EnquiryDialog
+          property={{
+            id,
+            title,
+            city,
+            category,
+            price,
+            auctionType,
+            status,
+            endDate,
+            sellerType,
+            stage,
+          }}
+          open={showEnquiry}
+          onOpenChange={setShowEnquiry}
+        />
+        <UploadDocumentsDialog
+          property={{
+            id,
+            title,
+            city,
+            category,
+            price,
+            auctionType,
+            status,
+            endDate,
+            sellerType,
+            stage,
+          }}
+          open={showUpload}
+          onOpenChange={setShowUpload}
+        />
+        <PlaceBidDialog
+          property={{
+            id,
+            title,
+            city,
+            category,
+            price,
+            auctionType,
+            status,
+            endDate,
+            sellerType,
+            stage,
+          }}
+          open={showBid}
+          onOpenChange={setShowBid}
+        />
         <Link href={`/auction/${id}`} className="flex-1">
           <Button 
             className="w-full h-10 md:h-11 bg-[#FF5722] hover:bg-[#FF5722]/90 font-semibold text-sm md:text-base"
